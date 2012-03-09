@@ -77,7 +77,7 @@ public abstract class Sketch implements	Drawable,
 		this.frame.add(panel, BorderLayout.CENTER);
 		this.frame.setResizable(false);
 		
-		this.setCanvasSize(width, height);
+		this.setSize(width, height);
 		this.setFramerate(framerate);
 	}
 	
@@ -93,7 +93,7 @@ public abstract class Sketch implements	Drawable,
 		this.frame.setTitle(title);
 	}
 	
-	public void setCanvasSize(int width, int height) {
+	public void setSize(int width, int height) {
 		BufferedImage image =
 				new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		

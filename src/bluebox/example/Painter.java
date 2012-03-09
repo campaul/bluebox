@@ -25,7 +25,7 @@ public class Painter extends Sketch {
 	
 	public Painter() {
 		this.setTitle("Painter");
-		this.setCanvasSize(500, 500);
+		this.setSize(500, 500);
 		this.setFramerate(60);
 		
 		this.chooser = new JColorChooser();
