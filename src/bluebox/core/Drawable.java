@@ -1,10 +1,10 @@
 package bluebox.core;
 
-import java.awt.Graphics2D;
+import bluebox.graphics.GraphicsContext;
 
 public interface Drawable {
 
-	public void draw(Graphics2D g);
+	public void draw(GraphicsContext g);
 	public int getWidth();
 	public int getHeight();
 	

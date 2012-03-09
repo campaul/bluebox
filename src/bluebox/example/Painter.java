@@ -1,12 +1,12 @@
 package bluebox.example;
 
 import java.awt.BasicStroke;
-import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JColorChooser;
 
 import bluebox.core.Sketch;
+import bluebox.graphics.GraphicsContext;
 
 public class Painter extends Sketch {
 
@@ -27,7 +27,6 @@ public class Painter extends Sketch {
 		this.setTitle("Painter");
 		this.setCanvasSize(500, 500);
 		this.setFramerate(60);
-		this.setAntiAliasing(true);
 		
 		this.chooser = new JColorChooser();
 		this.add(this.chooser.getChooserPanels()[0], Sketch.SOUTH);
@@ -42,12 +41,15 @@ public class Painter extends Sketch {
 	}
 	
 	@Override
-	public void draw(Graphics2D g) {
+	public void draw(GraphicsContext g) {
+		g.setAntialiasing(true);
 		g.setColor(chooser.getColor());
 		g.setStroke(new BasicStroke(this.stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		
 		if(mouse.buttonDown(1))
 			g.drawLine(lastX, lastY, mouse.getX(), mouse.getY());
+		
+		g.dispose();
 		
 		lastX = mouse.getX();
 		lastY = mouse.getY();

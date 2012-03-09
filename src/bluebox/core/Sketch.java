@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -24,6 +23,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import bluebox.graphics.GraphicsContext;
 import bluebox.hardware.Keyboard;
 import bluebox.hardware.Mouse;
 
@@ -48,7 +48,6 @@ public abstract class Sketch implements	Drawable,
 	private JPanel panel;
 	
 	private int framerate;
-	private boolean antialiasing;
 	
 	public Mouse mouse;
 	public Keyboard keyboard;
@@ -61,14 +60,7 @@ public abstract class Sketch implements	Drawable,
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void paintComponent(Graphics g) {
-				Graphics2D canvasg = (Graphics2D)canvas.getGraphics();
-				if(antialiasing) {
-					canvasg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				} else {
-					canvasg.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-				}
-				
-				draw(canvasg);
+				draw(new GraphicsContext((Graphics2D)canvas.getGraphics()));
 				g.drawImage(canvas, 0, 0, null);
 			}
 		};
@@ -208,11 +200,7 @@ public abstract class Sketch implements	Drawable,
 		this.setPixel(x, y, new Color(this.getRed(x, y), this.getGreen(x, y), blue));
 	}
 	
-	public void setAntiAliasing(boolean antialiasing) {
-		this.antialiasing = antialiasing;
-	}
-	
-	public void draw(Graphics2D g) {};
+	public void draw(GraphicsContext context) {};
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {}
