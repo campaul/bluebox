@@ -11,10 +11,17 @@ public class Mouse {
 	private int x;
 	private int y;
 	
+	private int xOffset = 0;
+	private int yOffset = 0;
+	
 	private HashMap<Integer, Boolean> buttons;
 	
-	public Mouse(Component component) {
+	public Mouse() {
 		buttons = new HashMap<Integer, Boolean>();
+	}
+	
+	public Mouse(Component component) {
+		this();
 		
 		component.addMouseListener(new MouseListener() {
 			
@@ -43,18 +50,17 @@ public class Mouse {
 			
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				x = e.getX();
-				y = e.getY();
+				x = e.getX() - xOffset;
+				y = e.getY() - yOffset;
 			}
 			
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				x = e.getX();
-				y = e.getY();
+				x = e.getX() - xOffset;
+				y = e.getY() - yOffset;
 			}
 			
 		});
-		
 	}
 	
 	public int getX() {
@@ -63,6 +69,19 @@ public class Mouse {
 	
 	public int getY() {
 		return this.y;
+	}
+	
+	public int getXOffset() {
+		return this.xOffset;
+	}
+	
+	public int getYOffset() {
+		return this.yOffset;
+	}
+	
+	public void setOffset(int x, int y) {
+		this.xOffset = x;
+		this.yOffset = y;
 	}
 	
 	public boolean buttonDown(int button) {

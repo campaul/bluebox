@@ -1,12 +1,12 @@
 package bluebox.example;
 
 import java.awt.BasicStroke;
-import java.awt.event.KeyEvent;
 
 import javax.swing.JColorChooser;
 
 import bluebox.core.Sketch;
 import bluebox.graphics.GraphicsContext;
+import bluebox.ui.SketchFrame;
 
 public class Painter extends Sketch {
 
@@ -15,13 +15,9 @@ public class Painter extends Sketch {
 	
 	private JColorChooser chooser;
 	
+	private int stroke = 5;
 	private int lastX = 0;
 	private int lastY = 0;
-	private int stroke = 5;
-	
-	public static void main(String ... args) {
-		new Painter().render();
-	}
 	
 	public Painter() {
 		this.setTitle("Painter");
@@ -29,30 +25,32 @@ public class Painter extends Sketch {
 		this.setFramerate(60);
 		
 		this.chooser = new JColorChooser();
-		this.add(this.chooser.getChooserPanels()[0], Sketch.SOUTH);
-	}
-	
-	@Override
-	public void keyPressed(KeyEvent e) {
-		if(e.getKeyChar() == '+')
-			this.stroke = Math.min(this.stroke + 1, MAX_STROKE);
-		if(e.getKeyChar() == '-')
-			this.stroke = Math.max(this.stroke - 1, MIN_STROKE);
+		
+		this.setComponent("SOUTH", chooser.getChooserPanels()[0]);
 	}
 	
 	@Override
 	public void draw(GraphicsContext g) {
 		g.setAntialiasing(true);
 		g.setColor(chooser.getColor());
-		g.setStroke(new BasicStroke(this.stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+		g.setStroke(new BasicStroke(stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		
 		if(mouse.buttonDown(1))
 			g.drawLine(lastX, lastY, mouse.getX(), mouse.getY());
+		
+		if(keyboard.keyDown('+'))
+			stroke = Math.min(MAX_STROKE, stroke + 1);
+		if(keyboard.keyDown('-'))
+			stroke = Math.max(MIN_STROKE, stroke - 1);
 		
 		g.dispose();
 		
 		lastX = mouse.getX();
 		lastY = mouse.getY();
+	}
+	
+	public static void main(String ... args) {
+		new SketchFrame(new Painter()).present();
 	}
 	
 }

@@ -1,103 +1,41 @@
 package bluebox.core;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import bluebox.graphics.GraphicsContext;
 import bluebox.hardware.Keyboard;
 import bluebox.hardware.Mouse;
 
-public abstract class Sketch implements	Drawable,
-										MouseListener,
-										MouseMotionListener,
-										MouseWheelListener,
-										KeyListener,
-										FocusListener {
+public abstract class Sketch implements Drawable {
 	
-	private static final String DEFAULT_TITLE = "Sketch";
-	private static final int DEFAULT_WIDTH = 450;
-	private static final int DEFAULT_HEIGHT = 450;
-	private static final int DEFAULT_FRAMERATE = 60;
+	private String title = "Sketch";
+	private int framerate = 60;
 	
-	public static final String NORTH = BorderLayout.NORTH;
-	public static final String SOUTH = BorderLayout.SOUTH;
-	public static final String EAST = BorderLayout.EAST;
-	public static final String WEST = BorderLayout.WEST;
+	protected Mouse mouse = new Mouse();
+	protected Keyboard keyboard = new Keyboard();
 	
-	private JFrame frame;
-	private JPanel panel;
+	private BufferedImage image =
+			new BufferedImage(450, 450, BufferedImage.TYPE_INT_RGB);
 	
-	private int framerate;
-	
-	public Mouse mouse;
-	public Keyboard keyboard;
-	
-	private BufferedImage canvas;
-	
-	public Sketch(String title, int width, int height, int framerate) {
-		this.frame = new JFrame(title);
-		this.panel = new JPanel() {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public void paintComponent(Graphics g) {
-				draw(new GraphicsContext((Graphics2D)canvas.getGraphics()));
-				g.drawImage(canvas, 0, 0, null);
-			}
-		};
+	private HashMap<String, Component> components =
+			new HashMap<String, Component>();
 		
-		this.panel.addMouseListener(this);
-		this.panel.addMouseMotionListener(this);
-		this.panel.addMouseWheelListener(this);
-		this.frame.addKeyListener(this);
-		
-		this.mouse = new Mouse(panel);
-		this.keyboard = new Keyboard(frame);
-		
-		this.frame.setLayout(new BorderLayout());
-		this.frame.add(panel, BorderLayout.CENTER);
-		this.frame.setResizable(false);
-		
-		this.setSize(width, height);
-		this.setFramerate(framerate);
-	}
-	
-	public Sketch() {
-		this(DEFAULT_TITLE, DEFAULT_WIDTH, DEFAULT_HEIGHT, DEFAULT_FRAMERATE);
-	}
-	
-	public void add(Component component, String location) {
-		this.frame.add(component, location);
-	}
-	
 	public void setTitle(String title) {
-		this.frame.setTitle(title);
+		this.title = title;
 	}
 	
 	public void setSize(int width, int height) {
 		BufferedImage image =
 				new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 		
-		image.getGraphics().drawImage(this.canvas, 0, 0, null);
+		image.getGraphics().drawImage(this.image, 0, 0, null);
 		
 		this.load(image);
 	}
@@ -106,44 +44,40 @@ public abstract class Sketch implements	Drawable,
 		this.framerate = framerate;
 	}
 	
-	public String getTitle() {
-		return this.frame.getTitle();
+	public String setTitle() {
+		return this.title;
 	}
 	
 	public int getWidth() {
-		return this.canvas.getWidth();
+		return this.image.getWidth();
 	}
 	
 	public int getHeight() {
-		return this.canvas.getHeight();
+		return this.image.getHeight();
 	}
 	
 	public int getFramerate() {
 		return this.framerate;
 	}
 	
-	public void render() {
-		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.frame.pack();
-		this.frame.setLocationRelativeTo(null);
-		this.frame.setVisible(true);
-		
-		new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				while(true) {
-					frame.repaint();
-					
-					try {
-						Thread.sleep((long)(1.0/framerate * 1000));
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-			
-		}).start();
+	public String getTitle() {
+		return this.title;
+	}
+	
+	public void setMouse(Mouse mouse) {
+		this.mouse = mouse;
+	}
+	
+	public void setKeyboard(Keyboard keyboard) {
+		this.keyboard = keyboard;
+	}
+	
+	public void setComponent(String id, Component component) {
+		this.components.put(id, component);
+	}
+	
+	public Component getComponent(String id) {
+		return this.components.get(id);
 	}
 	
 	public void load(File file) {
@@ -155,21 +89,19 @@ public abstract class Sketch implements	Drawable,
 	}
 	
 	public void load(BufferedImage image) {
-		this.canvas = image;
-		this.panel.setPreferredSize(new Dimension(canvas.getWidth(), canvas.getHeight()));
-		this.frame.pack();
+		this.image = image;
 	}
 	
 	public void save(File file, String type) {
 		try {
-			ImageIO.write(this.canvas, type, file);
+			ImageIO.write(this.image, type, file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public Color getPixel(int x, int y) {
-		return new Color(this.canvas.getRGB(x, y));
+		return new Color(this.image.getRGB(x, y));
 	}
 	
 	public int getRed(int x, int y) {
@@ -185,7 +117,7 @@ public abstract class Sketch implements	Drawable,
 	}
 	
 	public void setPixel(int x, int y, Color c) {
-		this.canvas.setRGB(x, y, c.getRGB());
+		this.image.setRGB(x, y, c.getRGB());
 	}
 	
 	public void setRed(int x, int y, int red) {
@@ -200,45 +132,14 @@ public abstract class Sketch implements	Drawable,
 		this.setPixel(x, y, new Color(this.getRed(x, y), this.getGreen(x, y), blue));
 	}
 	
+	public GraphicsContext createGraphicsContext() {
+		return new GraphicsContext(this.image.createGraphics());
+	}
+	
+	public BufferedImage getImage() {
+		return this.image;
+	}
+	
 	public void draw(GraphicsContext context) {};
-	
-	@Override
-	public void mouseClicked(MouseEvent e) {}
-	
-	@Override
-	public void mouseEntered(MouseEvent e) {}
-	
-	@Override
-	public void mouseExited(MouseEvent e) {}
-	
-	@Override
-	public void mousePressed(MouseEvent e) {}
-	
-	@Override
-	public void mouseReleased(MouseEvent e) {}
-	
-	@Override
-	public void mouseDragged(MouseEvent e) {}
-	
-	@Override
-	public void mouseMoved(MouseEvent e) {}
-	
-	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {}
-	
-	@Override
-	public void keyPressed(KeyEvent e) {}
-	
-	@Override
-	public void keyReleased(KeyEvent e) {}
-	
-	@Override
-	public void keyTyped(KeyEvent e) {}
-	
-	@Override
-	public void focusGained(FocusEvent e) {}
-	
-	@Override
-	public void focusLost(FocusEvent e) {}
 	
 }

@@ -7,21 +7,29 @@ import java.util.HashMap;
 
 public class Keyboard {
 
-	private HashMap<Integer, Boolean> keys;
+	private HashMap<Integer, Boolean> keyCodes;
+	private HashMap<Character, Boolean> keyChars;
+	
+	public Keyboard() {
+		keyCodes = new HashMap<Integer, Boolean>();
+		keyChars = new HashMap<Character, Boolean>();
+	}
 	
 	public Keyboard(Component component) {
-		keys = new HashMap<Integer, Boolean>();
+		this();
 		
 		component.addKeyListener(new KeyListener() {
 			
 			@Override
 			public void keyPressed(KeyEvent e) {
-				keys.put(e.getKeyCode(), true);
+				keyCodes.put(e.getKeyCode(), true);
+				keyChars.put(e.getKeyChar(), true);
 			}
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				keys.put(e.getKeyCode(), false);
+				keyCodes.put(e.getKeyCode(), false);
+				keyChars.put(e.getKeyChar(), false);
 			}
 			
 			@Override
@@ -31,7 +39,16 @@ public class Keyboard {
 	}
 	
 	public boolean keyDown(int key) {
-		Boolean down = keys.get(key);
+		Boolean down = keyCodes.get(key);
+		
+		if(down == null)
+			down = false;
+			
+		return down;
+	}
+	
+	public boolean keyDown(char key) {
+		Boolean down = keyChars.get(key);
 		
 		if(down == null)
 			down = false;
