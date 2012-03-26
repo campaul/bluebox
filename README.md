@@ -6,7 +6,7 @@
 
 The Sketch class provides basic 2D rendering facilities. This example will
 allow the user to draw freehand lines by clicking and dragging the mouse.
-The built in SketchFrame class provides an easy way to present a Sketch.
+The provided SketchFrame class provides an easy way to present a Sketch.
 
 ```java
 import bluebox.core.Sketch;
@@ -40,3 +40,4 @@ public class Drawing extends Sketch {
 
 }
 ```
+
