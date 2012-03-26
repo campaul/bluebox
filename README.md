@@ -18,8 +18,8 @@ public class Drawing extends Sketch {
     private int oldX = 0;
     private int oldY = 0;
 
-    public Draw() {
-        this.setTitle("Draw");
+    public Drawing() {
+        this.setTitle("Drawing");
         this.setSize(500, 500);
         this.setFramerate(60);
     }
