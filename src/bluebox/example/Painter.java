@@ -1,6 +1,8 @@
 package bluebox.example;
 
 import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Component;
 
 import javax.swing.JColorChooser;
 
@@ -24,9 +26,11 @@ public class Painter extends Sketch {
 		this.setSize(500, 500);
 		this.setFramerate(60);
 		
-		this.chooser = new JColorChooser();
-		
-		this.setComponent("SOUTH", chooser.getChooserPanels()[0]);
+		this.chooser = new JColorChooser();		
+	}
+	
+	public Component getColorChooser() {
+		return chooser.getChooserPanels()[0];
 	}
 	
 	@Override
@@ -50,7 +54,10 @@ public class Painter extends Sketch {
 	}
 	
 	public static void main(String ... args) {
-		new SketchFrame(new Painter()).present();
+		Painter painter = new Painter();
+		SketchFrame frame = new SketchFrame(painter);
+		frame.add(painter.getColorChooser(), BorderLayout.SOUTH);
+		frame.present();
 	}
 	
 }

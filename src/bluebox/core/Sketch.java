@@ -1,11 +1,9 @@
 package bluebox.core;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
@@ -23,9 +21,6 @@ public abstract class Sketch implements Drawable {
 	
 	private BufferedImage image =
 			new BufferedImage(450, 450, BufferedImage.TYPE_INT_RGB);
-	
-	private HashMap<String, Component> components =
-			new HashMap<String, Component>();
 		
 	public void setTitle(String title) {
 		this.title = title;
@@ -70,14 +65,6 @@ public abstract class Sketch implements Drawable {
 	
 	public void setKeyboard(Keyboard keyboard) {
 		this.keyboard = keyboard;
-	}
-	
-	public void setComponent(String id, Component component) {
-		this.components.put(id, component);
-	}
-	
-	public Component getComponent(String id) {
-		return this.components.get(id);
 	}
 	
 	public void load(File file) {
