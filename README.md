@@ -6,8 +6,14 @@
 
 The Sketch class provides basic 2D rendering facilities. This example will
 allow the user to draw freehand lines by clicking and dragging the mouse.
+The built in SketchFrame class provides an easy way to present a Sketch.
+
 ```java
-public class Draw extends Sketch {
+import bluebox.core.Sketch;
+import bluebox.graphics.GraphicsContext;
+import bluebox.ui.SketchFrame;
+
+public class Drawing extends Sketch {
 
     private int oldX = 0;
     private int oldY = 0;
@@ -22,26 +28,15 @@ public class Draw extends Sketch {
     public void draw(GraphicsContext g) {
         if(mouse.buttonDown(1))
             g.drawLine(oldX, oldY, mouse.getX(), mouse.getY());
-	g.dispose();
+        g.dispose();
 
         oldX = mouse.getX();
         oldY = mouse.getY();
     }
 
+    public static void main(String ... args) {
+    	new SketchFrame(new Drawing()).present();
+    }
+
 }
-```
-
-## Displaying a Sketch
-
-There are several ways to present a Sketch, but the easiest is to use the
-prebuilt SketchFrame class.
-```java
-new SketchFrame(new Draw()).present();
-```
-
-This will create and display a window containing your Sketch. For a more
-flexible option, you can create a SketchPanel. A SketchPanel is a Swing
-comonent that can be easily added to any Swing application.
-```java
-new SketchPanel(new Draw());
 ```
