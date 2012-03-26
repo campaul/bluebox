@@ -26,11 +26,11 @@ import java.text.AttributedCharacterIterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class GraphicsContext extends Graphics2D {
+public class Context extends Graphics2D {
 
 	private LinkedList<Graphics2D> stack;
 	
-	public GraphicsContext(Graphics2D g) {
+	public Context(Graphics2D g) {
 		this.stack = new LinkedList<Graphics2D>();
 		this.stack.push(g);
 	}

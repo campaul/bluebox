@@ -1,9 +1,9 @@
 package bluebox.core;
 
-import bluebox.graphics.GraphicsContext;
+import bluebox.graphics.Context;
 
 public interface Drawable {
 
-	public void draw(GraphicsContext g);
+	public void draw(Context context);
 	
 }

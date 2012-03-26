@@ -5,7 +5,7 @@ import java.awt.BasicStroke;
 import javax.swing.JColorChooser;
 
 import bluebox.core.Sketch;
-import bluebox.graphics.GraphicsContext;
+import bluebox.graphics.Context;
 import bluebox.ui.SketchFrame;
 
 public class Painter extends Sketch {
@@ -30,20 +30,20 @@ public class Painter extends Sketch {
 	}
 	
 	@Override
-	public void draw(GraphicsContext g) {
-		g.setAntialiasing(true);
-		g.setColor(chooser.getColor());
-		g.setStroke(new BasicStroke(stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+	public void draw(Context context) {
+		context.setAntialiasing(true);
+		context.setColor(chooser.getColor());
+		context.setStroke(new BasicStroke(stroke, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 		
 		if(mouse.buttonDown(1))
-			g.drawLine(lastX, lastY, mouse.getX(), mouse.getY());
+			context.drawLine(lastX, lastY, mouse.getX(), mouse.getY());
 		
 		if(keyboard.keyDown('+'))
 			stroke = Math.min(MAX_STROKE, stroke + 1);
 		if(keyboard.keyDown('-'))
 			stroke = Math.max(MIN_STROKE, stroke - 1);
 		
-		g.dispose();
+		context.dispose();
 		
 		lastX = mouse.getX();
 		lastY = mouse.getY();

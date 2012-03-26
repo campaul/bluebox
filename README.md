@@ -10,7 +10,7 @@ The built in SketchFrame class provides an easy way to present a Sketch.
 
 ```java
 import bluebox.core.Sketch;
-import bluebox.graphics.GraphicsContext;
+import bluebox.graphics.Context;
 import bluebox.ui.SketchFrame;
 
 public class Drawing extends Sketch {
@@ -25,10 +25,10 @@ public class Drawing extends Sketch {
     }
 
     @Override
-    public void draw(GraphicsContext g) {
+    public void draw(Context context) {
         if(mouse.buttonDown(1))
-            g.drawLine(oldX, oldY, mouse.getX(), mouse.getY());
-        g.dispose();
+            context.drawLine(oldX, oldY, mouse.getX(), mouse.getY());
+        context.dispose();
 
         oldX = mouse.getX();
         oldY = mouse.getY();

@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import bluebox.graphics.GraphicsContext;
+import bluebox.graphics.Context;
 import bluebox.hardware.Keyboard;
 import bluebox.hardware.Mouse;
 
@@ -132,14 +132,14 @@ public abstract class Sketch implements Drawable {
 		this.setPixel(x, y, new Color(this.getRed(x, y), this.getGreen(x, y), blue));
 	}
 	
-	public GraphicsContext createGraphicsContext() {
-		return new GraphicsContext(this.image.createGraphics());
+	public Context createGraphicsContext() {
+		return new Context(this.image.createGraphics());
 	}
 	
 	public BufferedImage getImage() {
 		return this.image;
 	}
 	
-	public void draw(GraphicsContext context) {};
+	public void draw(Context context) {};
 	
 }
